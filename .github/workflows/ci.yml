@@ -3,10 +3,7 @@ name: ci
 on:
   push:
     branches: [main]
-    # Prose changes nothing a compiler or linter can check.
-    paths-ignore: ["**.md", "LICENSE"]
   pull_request:
-    paths-ignore: ["**.md", "LICENSE"]
 
 # A new push supersedes any run still in progress for the same ref.
 concurrency:
