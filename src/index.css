@@ -1,0 +1,138 @@
+/* Scan this app's own source and nothing else. Tailwind's automatic detection
+   walks the whole repository, turning a word in a Rust file or a document into a
+   utility class in the shipped stylesheet. */
+@import "tailwindcss" source(none);
+@source "../index.html";
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ume paper. White sheet, one green, mincho for the name, gothic for the
+   numbers. The dashboard stays a dashboard: these tokens only recolor the
+   existing cards, meters, and charts. Paper is #ffffff, never warm. */
+:root {
+  color-scheme: light;
+  --radius: 0px;
+  --background: #ffffff;
+  --foreground: #1f1f1f;
+  --card: #ffffff;
+  --card-foreground: #1f1f1f;
+  --popover: #ffffff;
+  --popover-foreground: #1f1f1f;
+  --primary: #00734e;
+  --primary-foreground: #ffffff;
+  --secondary: #f5f5f5;
+  --secondary-foreground: #1f1f1f;
+  --muted: #f5f5f5;
+  --muted-foreground: #4a4a4a;
+  --accent: #e7f6ef;
+  --accent-foreground: #065c43;
+  --destructive: #8a1f1f;
+  --border: #e6e6e6;
+  --input: #e6e6e6;
+  --ring: #00734e;
+  --chart-1: #00734e;
+  --chart-2: #065c43;
+  --chart-3: #3d6b58;
+  --chart-4: #1f1f1f;
+  --chart-5: #6a6a6a;
+  --ok: #00734e;
+  --warn: #8a5a12;
+  --ume: #00734e;
+  --ume-hot: #00563a;
+  --mast-rule: #c8c8c8;
+  --serif: "Shippori Mincho", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", "Hiragino Mincho ProN", serif;
+  --sans: "Zen Kaku Gothic New", "PingFang SC", "Hiragino Sans", "Noto Sans SC", ui-sans-serif, system-ui, sans-serif;
+  --mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+}
+
+.dark {
+  color-scheme: dark;
+  --background: #161616;
+  --foreground: #d4d4d4;
+  --card: #1e1e1e;
+  --card-foreground: #d4d4d4;
+  --popover: #1e1e1e;
+  --popover-foreground: #d4d4d4;
+  --primary: #3dba8b;
+  --primary-foreground: #161616;
+  --secondary: #242424;
+  --secondary-foreground: #d4d4d4;
+  --muted: #242424;
+  --muted-foreground: #a8a8a8;
+  --accent: #143028;
+  --accent-foreground: #8ee0c2;
+  --destructive: #e8b4b4;
+  --border: #2c2c2c;
+  --input: #2c2c2c;
+  --ring: #3dba8b;
+  --chart-1: #3dba8b;
+  --chart-2: #8ee0c2;
+  --chart-3: #7ed9b8;
+  --chart-4: #d4d4d4;
+  --chart-5: #8a8a8a;
+  --ok: #3dba8b;
+  --warn: #e0c07a;
+  --ume: #3dba8b;
+  --ume-hot: #7ed9b8;
+  --mast-rule: #3a3a3a;
+}
+
+@theme inline {
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-ok: var(--ok);
+  --color-warn: var(--warn);
+  --font-serif: var(--serif);
+  --font-sans: var(--sans);
+  --font-mono: var(--mono);
+}
+
+@layer base {
+  * { @apply border-border outline-ring/50; }
+  html { scrollbar-gutter: stable; }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection { background: #e7f6ef; color: #141414; }
+  .dark ::selection { background: #143028; color: #e8e8e8; }
+  :focus-visible { outline: 1px solid var(--ume); outline-offset: 2px; }
+}
+
+.tnum { font-variant-numeric: tabular-nums; font-family: var(--mono); }
+
+.wordmark {
+  font-family: var(--serif);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--foreground);
+}
+.wordmark:hover { color: var(--ume-hot); }
