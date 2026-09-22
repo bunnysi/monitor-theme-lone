@@ -1,45 +1,52 @@
 # monitor-theme-ume
 
-[monitor](https://github.com/monitor-probe/monitor) 的状态页主题。白纸、梅绿、明朝站名。仪表盘结构沿用 [默认主题](https://github.com/monitor-probe/monitor-theme-default)。
+A public status-page theme for [monitor](https://github.com/monitor-probe/monitor). White page, one green, a mincho site name. The dashboard layout comes from [monitor-theme-default](https://github.com/monitor-probe/monitor-theme-default).
 
-## 安装
+![preview](preview.png)
+
+## Install
+
+Download `theme.tar.gz` from [Releases](https://github.com/fennlee/monitor-theme-ume/releases). In the hub admin, open Themes and upload it. Or extract it yourself:
 
 ```bash
-npm ci
-npm run build
+tar xzf theme.tar.gz -C /path/to/themes/ume
 ```
 
-把 `theme.json` 和 `dist/` 放进 hub 的主题目录，目录名必须是 `ume`：
+The directory name must be `ume`, matching `short` in `theme.json`. Switch to it on the Themes page. No restart.
 
-```text
-<themes-dir>/ume/
-├── theme.json
-└── dist/
-    └── index.html
-```
+A release is cut from a `v*` tag. The archive contains `theme.json`, `dist/`, and `preview.png`.
 
-在后台「主题」页切换，不用重启。
+## Develop
 
-开发时 Vite 把 `/api` 和 WebSocket 代理到本机 hub：
+Node 24. Point Vite at a local hub, then start the theme:
 
 ```bash
 monitor-hub --listen 127.0.0.1:9911 --db /tmp/monitor.db --site http://127.0.0.1:9911
+npm ci
 npm run dev
 ```
 
-提交前：`npm run build && npm run lint && npm test`。
+`npm run dev` proxies `/api` and the WebSocket to that hub. Before a change lands, run:
 
-## 接口
+```bash
+npm run lint && npm test && npm run build
+```
 
-主题是静态页面，只读这些同源接口：
+## What it draws
 
-- `GET /api/me` — 站点名、登录状态、公开页开关
-- `GET /api/nodes` — 节点、实时指标、累计流量
-- `GET /api/nodes/{id}/metrics` — 历史指标和延迟
-- `GET /api/ws` — 每 2 秒一次节点快照
+The theme is a static page. It reads four same-origin endpoints and nothing else:
 
-窗口丢包率用响应里的 `loss`，不要自己平均样本行里的桶百分比。字段以 hub 的 `src/api.rs` 为准。详情页路径是 `/node/{id}`。
+| Endpoint | Use |
+|---|---|
+| `GET /api/me` | Site name, sign-in state, public-page switch |
+| `GET /api/nodes` | Nodes, live metrics, traffic totals |
+| `GET /api/nodes/{id}/metrics` | History and latency |
+| `GET /api/ws` | A node snapshot every 2 seconds |
 
-## 许可
+The node page is `/node/{id}`. Anonymous `/api/nodes` returns public nodes only, without `ip`, `hostname`, or `remark`.
 
-MIT。仪表盘逻辑与图表来自 monitor-theme-default，同样 MIT。
+Use the `loss` field on the metrics response for packet loss. Do not average the per-bucket `loss` values in the sample rows. Field names follow the hub's `src/api.rs`.
+
+## License
+
+MIT. The dashboard structure and charts are from monitor-theme-default, also MIT.
