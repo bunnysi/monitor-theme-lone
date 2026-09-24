@@ -7,8 +7,12 @@ import type { Node } from "@/lib/api"
 import { bytes, daysUntil, FOREVER, osName, pair, percent, rate, uptime } from "@/lib/format"
 import { cn } from "@/lib/utils"
 
-/** Which direction the plan meters, matching the node's traffic_mode. */
+/**
+ * This period's usage as the plan meters it. The hub computes it; the switch
+ * below serves only a hub from before `month_used`.
+ */
 function monthUsage(node: Node): number {
+  if (typeof node.month_used === "number") return node.month_used
   const { month_rx: rx, month_tx: tx } = node
   switch (node.traffic_mode) {
     case "up":
@@ -73,9 +77,12 @@ function trafficFoot(node: Node) {
 }
 
 // No date means nothing expires: a permanent host, or one with no renewal set. A
-// blank corner asserts neither.
+// blank corner asserts neither. The days are the hub's count: it renews an online
+// node by its own calendar, and counting on the visitor's would show the node
+// expired for hours before that. Only a hub from before `expires_in` leaves the
+// count to the browser.
 function Expiry({ node }: { node: Node }) {
-  const days = daysUntil(node.expires_at)
+  const days = node.expires_in !== undefined ? node.expires_in : daysUntil(node.expires_at)
   if (days === null) return <span className="text-xs text-muted-foreground" title="永不到期">{FOREVER}</span>
   const tone = days < 0 ? "text-destructive" : days <= 7 ? "text-warn" : "text-muted-foreground"
   return (
