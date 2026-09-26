@@ -2,9 +2,9 @@
 
 ## [Unreleased]
 
-### Added
+### Changed
 
-- ume skin: white paper, plum green meters, mincho wordmark, gothic body.
+- Dusk skin: white paper, copper meters, self-hosted Jost. Unlimited monthly traffic keeps an empty track. Login and day/night are the same icon-and-label control.
 
 ### Fixed
 

@@ -26,18 +26,10 @@ function monthUsage(node: Node): number {
   }
 }
 
-// A node that has reported once has told the hub its shape -- cores, memory,
-// disk -- and the hub retains its traffic totals whether connected or not. A node
-// that never connected is the only case with nothing to show.
 function deployed(node: Node) {
   return node.cpu_cores > 0 || node.mem_total > 0
 }
 
-/**
- * The dot plus how long the machine has been up, or once it is gone, how long it
- * has been absent -- the first question asked of an offline node. Both are
- * durations, so the badge keeps its shape either way.
- */
 export function Status({ node }: { node: Node }) {
   const down = node.last_seen ? Date.now() / 1000 - node.last_seen : 0
   const label = node.online
@@ -46,8 +38,6 @@ export function Status({ node }: { node: Node }) {
       ? `离线 ${down >= 60 ? uptime(down) : ""}`
       : "未接入"
   return (
-    // Muted once it stops reporting: the figures on the page are genuine, merely
-    // no longer current.
     <Badge
       variant="outline"
       className={cn("tnum shrink-0 gap-1.5 font-normal", !node.online && "text-muted-foreground")}
@@ -58,7 +48,6 @@ export function Status({ node }: { node: Node }) {
   )
 }
 
-/** Where the machine is, in the same shape as the badge next to it. */
 export function Country({ node }: { node: Node }) {
   if (!node.country) return null
   return (
@@ -68,8 +57,6 @@ export function Country({ node }: { node: Node }) {
   )
 }
 
-// Traffic uses the plan's own counting rule, so the bar matches the quota the
-// node is billed against.
 function trafficFoot(node: Node) {
   return node.traffic_limit > 0
     ? pair(monthUsage(node), node.traffic_limit)
@@ -92,25 +79,37 @@ function Expiry({ node }: { node: Node }) {
   )
 }
 
+function Flow({ down, up, quiet }: { down: string; up: string; quiet?: boolean }) {
+  const tone = quiet ? "text-muted-foreground" : "text-foreground"
+  return (
+    <div className={cn("tnum grid grid-cols-2 gap-x-4 text-xs", tone)}>
+      <span className="inline-flex items-center gap-1.5">
+        <ArrowDown className="size-3 shrink-0 text-muted-foreground" strokeWidth={1.5} />
+        {down}
+      </span>
+      <span className="inline-flex items-center gap-1.5">
+        <ArrowUp className="size-3 shrink-0 text-muted-foreground" strokeWidth={1.5} />
+        {up}
+      </span>
+    </div>
+  )
+}
+
 export function NodeCard({ node, onOpen }: { node: Node; onOpen: () => void }) {
   const m = node.metrics
 
   return (
     <Card
       onClick={onOpen}
-      // min-w-0: a grid item sizes to its content unless told otherwise, and the
-      // OS line below does not wrap, so on a phone the card would grow past its
-      // column and scroll the page sideways. The truncate inside only takes effect
-      // once the card is allowed to be narrower.
-      className="min-w-0 cursor-pointer gap-0 p-4 transition-colors hover:border-ring"
       role="button"
       tabIndex={0}
       onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && (e.preventDefault(), onOpen())}
+      className="min-w-0 cursor-pointer gap-0 p-4 transition-colors hover:border-ring"
     >
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <div className="flex min-w-0 items-center gap-1.5">
-            <h3 className="truncate font-medium">{node.name}</h3>
+            <h3 className="truncate text-base font-medium">{node.name}</h3>
             <Country node={node} />
           </div>
           <p className="mt-1 truncate text-xs text-muted-foreground">
@@ -119,25 +118,19 @@ export function NodeCard({ node, onOpen }: { node: Node; onOpen: () => void }) {
             {node.arch ? ` · ${node.arch}` : ""}
           </p>
         </div>
-        {/* State right, identity left, one line each. */}
         <div className="flex shrink-0 flex-col items-end gap-1">
           <Status node={node} />
           <Expiry node={node} />
         </div>
       </div>
 
-      {/* One layout for both states: a disconnected node still knows its
-          cores, memory, disk size and traffic totals, and showing those with
-          the live figures blank beats a stretched card with one line in it. */}
       {deployed(node) ? (
         <>
           <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-4">
-            {/* The core count belongs beside the word CPU: it is what the
-                percentage and the load averages are both measured against. */}
             <Meter
               label={`CPU ${node.cpu_cores} 核`}
               pct={m ? m.cpu : null}
-              foot={m ? m.load.map((n) => n.toFixed(2)).join(" ") : "—"}
+              foot={m ? `负载 ${m.load.map((n) => n.toFixed(2)).join(" ")}` : "—"}
             />
             <Meter
               label="内存"
@@ -150,35 +143,25 @@ export function NodeCard({ node, onOpen }: { node: Node; onOpen: () => void }) {
               foot={m ? pair(m.disk_used, m.disk_total) : bytes(node.disk_total)}
             />
             <Meter
-              label="流量"
+              label="本月流量"
               pct={node.traffic_limit > 0 ? percent(monthUsage(node), node.traffic_limit) : null}
               empty={FOREVER}
               foot={trafficFoot(node)}
             />
           </div>
 
-          <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-2 border-t pt-4 text-xs">
-            <span className="tnum inline-flex items-center gap-1.5">
-              <ArrowDown className="size-3 text-muted-foreground" />
-              {m ? rate(m.net_rx) : "—"}
-            </span>
-            <span className="tnum inline-flex items-center gap-1.5">
-              <ArrowUp className="size-3 text-muted-foreground" />
-              {m ? rate(m.net_tx) : "—"}
-            </span>
-            <span className="tnum inline-flex items-center gap-1.5 text-muted-foreground">
-              <ArrowDown className="size-3" />
-              {bytes(node.total_rx)}
-            </span>
-            <span className="tnum inline-flex items-center gap-1.5 text-muted-foreground">
-              <ArrowUp className="size-3" />
-              {bytes(node.total_tx)}
-            </span>
+          <div className="mt-4 space-y-2 border-t pt-3">
+            <div>
+              <div className="mb-1 text-xs text-muted-foreground">当前</div>
+              <Flow down={m ? rate(m.net_rx) : "—"} up={m ? rate(m.net_tx) : "—"} />
+            </div>
+            <div>
+              <div className="mb-1 text-xs text-muted-foreground">累计</div>
+              <Flow down={bytes(node.total_rx)} up={bytes(node.total_tx)} quiet />
+            </div>
           </div>
         </>
       ) : (
-        /* Never connected: nothing to plot, so the card stays short rather than
-           padding out to match its neighbours. */
         <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
           还没有接入。在后台生成安装命令并执行一次。
         </p>

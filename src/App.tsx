@@ -1,5 +1,6 @@
 import { lazy, Suspense, useCallback, useEffect, useState } from "react"
-import { Moon, Sun, Wrench } from "lucide-react"
+
+import { LogIn, Moon, Sun } from "lucide-react"
 
 import { NodeCard } from "@/components/NodeCard"
 import { Summary } from "@/components/Summary"
@@ -112,29 +113,25 @@ export default function App() {
 
   return (
     <div className="min-h-svh">
-      <header className="sticky top-0 z-10 border-b border-(--mast-rule) bg-background">
-        <div className="mx-auto flex max-w-[1400px] items-center gap-3 px-4 py-4 sm:px-6">
-          {/* The site name is the way back to the list, so a node page needs
-              no back button of its own. */}
-          <button className="wordmark text-[1.375rem] leading-none transition-colors" onClick={() => go(null)}>
+      <header className="border-b border-(--mast-rule)">
+        <div className="mx-auto flex max-w-6xl items-center gap-6 px-5 py-5 sm:px-8">
+          <button type="button" className="wordmark" onClick={() => go(null)}>
             {me.site_name || "Monitor"}
           </button>
           <div className="flex-1" />
-          {/* The panel is a separate app built into the hub, not part of this
-              theme, so this is a navigation rather than a route. */}
-          <Button variant="ghost" size="sm" asChild>
-            <a href="/admin/">
-              <Wrench /> {me.authed ? "进入后台" : "登录"}
-            </a>
-          </Button>
-          <Button variant="ghost" size="icon" onClick={toggleTheme} title="切换主题">
-            {dark ? <Sun /> : <Moon />}
-          </Button>
+          <a className="mast-link" href="/admin/">
+            <LogIn strokeWidth={1.5} />
+            <span>{me.authed ? "进入后台" : "登录"}</span>
+          </a>
+          <button type="button" className="mast-link" onClick={toggleTheme}>
+            {dark ? <Sun strokeWidth={1.5} /> : <Moon strokeWidth={1.5} />}
+            <span>{dark ? "日间" : "夜间"}</span>
+          </button>
         </div>
       </header>
 
-      <main className="mx-auto max-w-[1400px] space-y-5 px-4 py-4 sm:px-6">
-        {error && <p className="text-sm text-destructive">{error}</p>}
+      <main className="mx-auto max-w-6xl space-y-6 px-5 py-6 sm:px-8">
+        {error && <p className="text-sm text-destructive" role="alert">{error}</p>}
 
         {open !== null ? (
           !nodes ? (
@@ -144,13 +141,13 @@ export default function App() {
               <NodeDetail node={selected} />
             </Suspense>
           ) : (
-            <p className="py-16 text-center text-sm text-muted-foreground">
+            <p className="py-16 text-sm text-muted-foreground">
               节点不存在或未公开。<button className="underline" onClick={() => go(null)}>返回列表</button>
             </p>
           )
         ) : !nodes ? (
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {[0, 1, 2].map((i) => (
+          <div className="grid gap-4 sm:grid-cols-2">
+            {[0, 1].map((i) => (
               <Skeleton key={i} className="h-72" />
             ))}
           </div>
@@ -158,9 +155,9 @@ export default function App() {
           <>
             <Summary nodes={sorted} />
             {sorted.length === 0 ? (
-              <p className="py-16 text-center text-sm text-muted-foreground">还没有节点</p>
+              <p className="py-16 text-sm text-muted-foreground">还没有节点</p>
             ) : (
-              <div className="grid items-start gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              <div className="grid items-start gap-4 sm:grid-cols-2">
                 {sorted.map((n: Node) => (
                   <NodeCard key={n.id} node={n} onOpen={() => go(n.id)} />
                 ))}

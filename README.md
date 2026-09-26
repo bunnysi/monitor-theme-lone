@@ -1,6 +1,6 @@
 # monitor-theme-ume
 
-A public status-page theme for [monitor](https://github.com/monitor-probe/monitor). White page, one green, a mincho site name. The dashboard layout comes from [monitor-theme-default](https://github.com/monitor-probe/monitor-theme-default).
+A public status-page theme for [monitor](https://github.com/monitor-probe/monitor). White page, dusk ink, one copper mark, a mincho site name. The dashboard layout comes from [monitor-theme-default](https://github.com/monitor-probe/monitor-theme-default).
 
 ![preview](preview.png)
 
