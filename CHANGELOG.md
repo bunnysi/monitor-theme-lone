@@ -4,7 +4,7 @@
 
 ### Changed
 
-- Dusk skin: white paper, copper meters, self-hosted Jost. Unlimited monthly traffic keeps an empty track. Login and day/night are the same icon-and-label control.
+- Renamed the repository from monitor-theme-ume. The installed directory stays `ume`.
 
 ### Fixed
 
