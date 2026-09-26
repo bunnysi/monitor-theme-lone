@@ -6,77 +6,103 @@
 @source "../src";
 @import "tw-animate-css";
 
+@font-face {
+  font-family: "Jost";
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("/fonts/jost-400-600-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Jost";
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("/fonts/jost-400-600-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
 @custom-variant dark (&:is(.dark *));
 
-/* ume paper. White sheet, one green, mincho for the name, gothic for the
-   numbers. The dashboard stays a dashboard: these tokens only recolor the
-   existing cards, meters, and charts. Paper is #ffffff, never warm. */
+/* lone paper, used as a status sheet. White page, one ink ladder, one
+   copper mark. The list is a ledger: a hairline of facts, then one row
+   per machine. Paper is #ffffff, never warm. */
 :root {
   color-scheme: light;
   --radius: 0px;
   --background: #ffffff;
-  --foreground: #1f1f1f;
+  --foreground: #141414;
   --card: #ffffff;
-  --card-foreground: #1f1f1f;
+  --card-foreground: #141414;
   --popover: #ffffff;
-  --popover-foreground: #1f1f1f;
-  --primary: #00734e;
+  --popover-foreground: #141414;
+  --primary: #a67c52;
   --primary-foreground: #ffffff;
-  --secondary: #f5f5f5;
-  --secondary-foreground: #1f1f1f;
-  --muted: #f5f5f5;
-  --muted-foreground: #4a4a4a;
-  --accent: #e7f6ef;
-  --accent-foreground: #065c43;
+  --secondary: #ffffff;
+  --secondary-foreground: #141414;
+  --muted: #ffffff;
+  --muted-foreground: #6b6b6b;
+  --accent: #ffffff;
+  --accent-foreground: #141414;
   --destructive: #8a1f1f;
   --border: #e6e6e6;
   --input: #e6e6e6;
-  --ring: #00734e;
-  --chart-1: #00734e;
-  --chart-2: #065c43;
-  --chart-3: #3d6b58;
-  --chart-4: #1f1f1f;
-  --chart-5: #6a6a6a;
-  --ok: #00734e;
+  --ring: #a67c52;
+  --chart-1: #a67c52;
+  --chart-2: #7a5a38;
+  --chart-3: #6b6b6b;
+  --chart-4: #141414;
+  --chart-5: #363636;
+  --ok: #a67c52;
   --warn: #8a5a12;
-  --ume: #00734e;
-  --ume-hot: #00563a;
-  --mast-rule: #c8c8c8;
-  --serif: "Shippori Mincho", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", "Hiragino Mincho ProN", serif;
-  --sans: "Zen Kaku Gothic New", "PingFang SC", "Hiragino Sans", "Noto Sans SC", ui-sans-serif, system-ui, sans-serif;
-  --mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+  --ume: #a67c52;
+  --ume-hot: #7a5a38;
+  --ink: #141414;
+  --ink-2: #363636;
+  --ink-3: #6b6b6b;
+  --word: #2a241e;
+  --hair: oklch(0 0 0 / 0.14);
+  --mast-rule: oklch(0 0 0 / 0.14);
+  --serif: "Jost", "Helvetica Neue", Arial, sans-serif;
+  --sans: "Jost", "Helvetica Neue", Arial, "PingFang SC", "Noto Sans SC", sans-serif;
+  --mono: "Jost", "Helvetica Neue", Arial, sans-serif;
 }
 
 .dark {
   color-scheme: dark;
   --background: #161616;
-  --foreground: #d4d4d4;
+  --foreground: #e8e8e8;
   --card: #1e1e1e;
-  --card-foreground: #d4d4d4;
+  --card-foreground: #e8e8e8;
   --popover: #1e1e1e;
-  --popover-foreground: #d4d4d4;
-  --primary: #3dba8b;
+  --popover-foreground: #e8e8e8;
+  --primary: #c4926a;
   --primary-foreground: #161616;
   --secondary: #242424;
-  --secondary-foreground: #d4d4d4;
+  --secondary-foreground: #e8e8e8;
   --muted: #242424;
-  --muted-foreground: #a8a8a8;
-  --accent: #143028;
-  --accent-foreground: #8ee0c2;
+  --muted-foreground: #a3a3a3;
+  --accent: #242424;
+  --accent-foreground: #e8e8e8;
   --destructive: #e8b4b4;
-  --border: #2c2c2c;
-  --input: #2c2c2c;
-  --ring: #3dba8b;
-  --chart-1: #3dba8b;
-  --chart-2: #8ee0c2;
-  --chart-3: #7ed9b8;
-  --chart-4: #d4d4d4;
-  --chart-5: #8a8a8a;
-  --ok: #3dba8b;
+  --border: #2e2e2e;
+  --input: #2e2e2e;
+  --ring: #c4926a;
+  --chart-1: #c4926a;
+  --chart-2: #d7b899;
+  --chart-3: #a3a3a3;
+  --chart-4: #e8e8e8;
+  --chart-5: #737373;
+  --ok: #c4926a;
   --warn: #e0c07a;
-  --ume: #3dba8b;
-  --ume-hot: #7ed9b8;
-  --mast-rule: #3a3a3a;
+  --ume: #c4926a;
+  --ume-hot: #d7b899;
+  --ink: #e8e8e8;
+  --ink-2: #d4d4d4;
+  --ink-3: #a3a3a3;
+  --word: #e8e8e8;
+  --mast-rule: #2e2e2e;
 }
 
 @theme inline {
@@ -122,17 +148,51 @@
     font-family: var(--sans);
     -webkit-font-smoothing: antialiased;
   }
-  ::selection { background: #e7f6ef; color: #141414; }
-  .dark ::selection { background: #143028; color: #e8e8e8; }
+  ::selection { background: #e6dfd6; color: #1a1511; }
+  .dark ::selection { background: #2e2e2e; color: #e8e8e8; }
   :focus-visible { outline: 1px solid var(--ume); outline-offset: 2px; }
 }
 
 .tnum { font-variant-numeric: tabular-nums; font-family: var(--mono); }
 
 .wordmark {
-  font-family: var(--serif);
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  color: var(--foreground);
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font-family: var(--sans);
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--word);
 }
-.wordmark:hover { color: var(--ume-hot); }
+.wordmark:hover { color: var(--ume); }
+
+.mast-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 2.75rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink-3);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.75rem;
+  text-decoration: none;
+}
+.mast-link:hover { color: var(--word); }
+.mast-link svg { width: 0.9rem; height: 0.9rem; flex: none; }
+
+.meter-track {
+  height: 10px;
+  width: 100%;
+  background: oklch(0 0 0 / 0.10);
+}
+.dark .meter-track { background: oklch(1 0 0 / 0.16); }
+.meter-fill {
+  height: 100%;
+  background: var(--ume);
+}

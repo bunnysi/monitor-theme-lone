@@ -4,7 +4,6 @@ import {
   Tooltip, XAxis, YAxis,
 } from "recharts"
 
-import { Badge } from "@/components/ui/badge"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Country, Status } from "@/components/NodeCard"
 import { api, type Node } from "@/lib/api"
@@ -319,9 +318,7 @@ export function NodeDetail({ node }: { node: Node }) {
         <Country node={node} />
         <Status node={node} />
         {node.agent_version && (
-          <Badge variant="outline" className="font-normal">
-            agent {node.agent_version}
-          </Badge>
+          <span className="text-xs text-muted-foreground">agent {node.agent_version}</span>
         )}
       </div>
 
