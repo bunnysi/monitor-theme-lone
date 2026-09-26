@@ -1,12 +1,12 @@
-# monitor-theme-ume
+# monitor-theme-lone
 
-A public status-page theme for [monitor](https://github.com/monitor-probe/monitor). White page, dusk ink, one copper mark, a mincho site name. The dashboard layout comes from [monitor-theme-default](https://github.com/monitor-probe/monitor-theme-default).
+A status-page theme for [monitor](https://github.com/monitor-probe/monitor). White page, dusk ink, one copper mark. The layout follows [monitor-theme-default](https://github.com/monitor-probe/monitor-theme-default).
 
 ![preview](preview.png)
 
 ## Install
 
-Download `theme.tar.gz` from [Releases](https://github.com/fennlee/monitor-theme-ume/releases). In the hub admin, open Themes and upload it. Or extract it yourself:
+Download `theme.tar.gz` from [Releases](https://github.com/llsi/monitor-theme-lone/releases). In the hub admin, open Themes and upload it. Or extract it yourself:
 
 ```bash
 tar xzf theme.tar.gz -C /path/to/themes/ume
