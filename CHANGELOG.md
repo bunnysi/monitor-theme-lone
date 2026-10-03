@@ -4,6 +4,7 @@
 
 ### Changed
 
+- Clone and Releases URLs point at `hipness/monitor-theme-lone`.
 - Renamed the repository from monitor-theme-ume. The installed directory stays `ume`.
 
 ### Fixed
